@@ -4,7 +4,9 @@
 
 *Karolinska Institutet*
 
-## Read the research article of the hands-on working group you are assigned to (see file “Student Groups.pdf” in shared folder General course material) and answer the following questions
+Read the research article of the hands-on working group you are assigned to (see file “Student Groups.pdf” in shared folder General course material) and answer the following questions:
+
+## Task 1
 
 #### What is the medically relevant insight from the article?
 
@@ -22,15 +24,15 @@ GWAS, to identify whether the identified DEGs were relevant to cardiovascular di
 
 #### List and explain at least three questions/ hypotheses you can think of that extend the analysis presented in the paper.
 
-1.  Compare the transcriptional profiles of atherosclerotic plaques across different sites (e.g. coronal or aortic plaques, ischemic stroke). This could identify site specific mechanisms for different types of plaque buildup.
+1.  Predictive value of MMP9 as a biomarker for cardiovascular events: can the levels of circulating MMP9 serve as a biomarker to predict cardiovascular events early on?
 2.  What is the role of epigenetic modifications in the site-specific vulnerability of atherosclerotic plaques?
 3.  Correlate the transcriptomics data obtained from the study with proteomics data, using advanced proteomics strategies, such as single cell proteomics, or spatial/deep visual proteomics
 
 #### Devise a computational analysis strategy for (some of) the listed questions under 3a.
 
-1.  Collect RNA from the different plaque locations and perform the same techniques as discussed in this paper (bulk RNA Sequencing, spatial transcriptomics)
-2.  Integrate the RNA-seq dataset with ChIP-Seq or ATAC-Seq data to correlate gene expression with chromatin accessibility
-3.  For the proteomics data, several techniques can be implemented. For single cell proteomics, isolate single cells using a FACS sorter and perform single cell proteomics in the relevant cell populations (macrophages, NK cells, B cells, SMCs). For spatial proteomics, the tissue will be sectioned. Then, using a laser capture microdissection microscope, the relevant plaque areas (proximal, most stenotic, distal) will be isolated and the proteome will be analysed using deep visual proteomics (Rosenberger et al, 2023, Nat methods)
+1.  Conduct statistical analyses on large patient datasets to evaluate the association between circulating MMP9 levels and the incidence of cardiovascular events, adjusting for cofounders. For this project, longitudinal patient data will be analysed using statistical software such as R.
+2.  The RNA-seq dataset will be integrated with ChIP-Seq or ATAC-Seq data to correlate gene expression with chromatin accessibility
+3.  For the proteomics data, several techniques can be implemented. For single cell proteomics, isolate single cells using a FACS sorter and perform single cell mass-spec based proteomics in the relevant cell populations (macrophages, NK cells, B cells, SMCs). For spatial proteomics, the tissue will be sectioned. Then, using a laser capture microdissection microscope, the relevant plaque areas (proximal, most stenotic, distal) will be isolated and the proteome will be analysed using deep visual proteomics (Rosenberger et al, 2023, Nat methods).
 
 ## Task 4
 
@@ -70,7 +72,7 @@ CO2 %>%
 
 ## Task 6
 
-#### Question 1
+### Question 1
 
 ```{r}
 ratio <- function(x) {
@@ -80,7 +82,7 @@ ratio <- function(x) {
 }
 ```
 
-#### Question 2
+### Question 2
 
 ```{r}
 mean_func <- function(x) {
@@ -94,3 +96,7 @@ mean_func <- function(x) {
 Pipes in R are used to make the code more readable and easy to understand, by structuring operations in a logical sequence. This can be unnecessary if the code is already simple. Also, when debugging it could be hard to tell where the error is coming from when the pipeline is long.
 
 ### Question 4
+
+The apply family contains functions that essentially minimise the need to create loops, by applying a specific function to an object. When working with large datasets, such as single cell RNA seq data, it can help streamline the process by quickly performing repetitive tasks.
+
+## Task 7
