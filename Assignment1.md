@@ -100,3 +100,132 @@ Pipes in R are used to make the code more readable and easy to understand, by st
 The apply family contains functions that essentially minimise the need to create loops, by applying a specific function to an object. When working with large datasets, such as single cell RNA seq data, it can help streamline the process by quickly performing repetitive tasks.
 
 ## Task 7
+
+### Compare the distributions of the body heights of the two species from the 'magic_guys.csv' dataset graphically
+
+```{r}
+library(ggplot2)
+data <- read.csv("magic_guys.csv", header = TRUE)
+par(mfrow=c(2,2))
+hist(data$length[data$species == "jedi"],
+     main = "Jedi length distribution",
+     xlab = "Length",
+     col = "darkcyan",
+     breaks = 10)
+hist(data$length[data$species == "jedi"],
+     main = "Jedi length distribution",
+     xlab = "Length",
+     col = "darkcyan",
+     breaks = 15)
+hist(data$length[data$species == "sith"],
+     main = "Sith length distribution",
+     xlab = "Length",
+     col = "darkmagenta",
+     breaks = 10)
+hist(data$length[data$species == "sith"],
+     main = "Sith length distribution",
+     xlab = "Length",
+     col = "darkmagenta",
+     breaks = 15)
+
+ggplot(data, aes(x = length, fill = species)) + 
+  geom_histogram(bins = 10) +
+  scale_fill_manual(values = c("darkcyan", "darkmagenta")) +
+  theme_minimal()
+ggplot(data, aes(x = length, fill = species)) + 
+  geom_histogram(bins = 15) +
+  scale_fill_manual(values = c("darkcyan", "darkmagenta")) +
+  theme_minimal() 
+
+par(mfrow=c(1,1))
+boxplot(data$length ~ data$species,
+        main = "Length distribution by species",
+        xlab = "Species",
+        ylab = "Length",
+        col = c("darkcyan", "darkmagenta"))
+ggplot(data, aes(x = species, y = length)) +
+  geom_boxplot(fill = c("darkcyan", "darkmagenta")) +
+  theme_minimal()
+```
+
+For demonstration purposes, I will save the last boxplot
+
+```{r}
+img <- ggplot(data, aes(x = species, y = length)) +
+  geom_boxplot(fill = c("darkcyan", "darkmagenta")) +
+  theme_minimal()
+install.packages("svglite")
+library(svglite)
+ggsave("img.png", img)
+ggsave("img.pdf", img)
+ggsave("img.svg", img)
+```
+
+.png is good for presentations and general screen viewing, as you can manipulate the background. .pdf is good for printing and publications. .svg is good for embedding in websites.
+
+### Load the gene expression data matrix from the ‘microarray_data.tab’ dataset provided in the shared folder, it is a big tabular separated matrix.
+
+```{r}
+data <- read.table("microarray_data.tab", header = TRUE, sep = "\t")
+```
+
+How big is the matrix in terms of rows and columns?
+
+```{r}
+dims(data)
+```
+
+Distribution of missing values
+
+```{r}
+missing <- rowSums(is.na(data))
+ggplot(data.frame(missing), aes(x=missing)) +
+  geom_histogram(fill="plum4", color="black", bins=30) +
+  labs(title="Distribution of Missing Values per Gene",
+       x="# of Missing Values", 
+       y="# of Genes") +
+  theme_minimal()
+```
+
+Find the genes for which there are more than X% (X=10%, 20%, 50%) missing values.
+
+```{r}
+threshold <- c(0.1, 0.2, 0.5)
+for (i in threshold) {
+  cutoff <- i * ncol(data)
+  genes_filtered <- rownames(data)[missing > cutoff])
+ 
+  print(dim(genes_filtered))
+})
+
+###I am not sure what the output is supposed to be here :(
+```
+
+Impute values: I am writing a function called impute that will replace all missing values with the average expression value.
+
+```{r}
+impute <- function(x) { 
+  avg <- colMeans()
+  for (i in 1:ncol(x)) {
+    x[, is.na(x[, i])] <- avg[i]
+  }
+  return(x)
+}
+```
+
+Visualise the data in the CO2 dataset
+
+```{r}
+data(CO2)
+ggplot(CO2, aes(x=conc, y=uptake, color=Treatment)) +
+  geom_point(size=2, alpha=0.9) +
+  geom_smooth(method="lm", se=TRUE) +
+  facet_wrap(~Type) +
+  scale_color_manual(values = c("darkcyan", "darkmagenta")) +
+  labs(title="CO2 Uptake",
+       x="Ambient CO2 concentration (mL/L)",
+       y="CO2 uptake rate (µmol/m² sec)") +
+  theme_minimal()
+```
+
+CO2 uptake increases with CO2 concentration Also, Missisipi plants react differently to the treatment, compared to Quebec, where plants behave the same.
