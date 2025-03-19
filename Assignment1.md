@@ -229,3 +229,80 @@ ggplot(CO2, aes(x=conc, y=uptake, color=Treatment)) +
 ```
 
 CO2 uptake increases with CO2 concentration Also, Missisipi plants react differently to the treatment, compared to Quebec, where plants behave the same.
+
+## Task 8
+
+### Installing the package 
+
+```{r}
+devtools::install_github("hirscheylab/tidybiology")
+library(tidybiology)
+library(tidyverse)
+data("chromosome")
+data("proteins")
+colnames(chromosome)
+colnames(proteins)
+#important to create the graphs below
+```
+
+Summary statistics for "chromosome
+
+```{r}
+chromosome %>%
+  summarize(across(c(variations, protein_codinggenes, mi_rna),
+                   list(mean = function(x) mean(x, na.rm = TRUE),
+                        median = function(x) median(x, na.rm = TRUE),
+                        max = function(x) max(x, na.rm = TRUE))))
+```
+
+Chromosome size distribution
+
+```{r}
+ggplot(chromosome, aes(x = length_mm)) +
+  geom_histogram(aes(y = ..density..), bins = 15, fill = "plum4", color = "black") +
+  geom_density(color = "black") +
+  labs(title = "Distribution of chromosome size",
+       x = "Chromosome size (mm)",
+       y = "Count") +
+  theme_minimal() 
+```
+
+Correlation of protein coding genes and miRNAs to chromosome length
+
+```{r}
+ggplot(chromosome, aes(x = protein_codinggenes, y = length_mm)) +
+  geom_point(color = "hotpink4", size = 3) +
+  geom_smooth(method = "lm", color = "grey40", se = TRUE) +
+  labs(title = "Correlation of chromosome size and length",
+       x = " # of protein coding genes",
+       y = "Chromosome size (mm)") +
+  theme_minimal() 
+         
+ggplot(chromosome, aes(x = mi_rna, y = length_mm)) +
+  geom_point(color = "lightseagreen", size = 3) +
+  geom_smooth(method = "lm", color = "grey40", se = TRUE) +
+  labs(title = "Correlation of number of miRNAs and length",
+       x = " # of miRNAs",
+       y = "Chromosome size (mm)") +
+  theme_minimal() 
+```
+
+Protein length and mass statistics and visualisation
+
+```{r}
+proteins  %>%
+  summarize(across(c(length, mass),
+                   list(mean = function(x) mean(x, na.rm = TRUE),
+                        median = function(x) median(x, na.rm = TRUE),
+                        max = function(x) max(x, na.rm = TRUE))))
+            
+ggplot(proteins, aes(x = length, y = mass)) +
+  geom_jitter(width = 0.7, height = 0.7, color = "darkred", size = 1, alpha = 0.4) +
+  geom_smooth(method = "lm", color = "grey40", se = TRUE) +
+  scale_y_log10() +
+  scale_x_log10() +
+  labs(title = "Correlation of protein length and mass",
+       x = "Protein length (aa)",
+       y = "Protein mass (kDa)") +
+  theme_minimal() 
+```
